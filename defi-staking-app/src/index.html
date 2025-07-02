@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DeFi Staking App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: #0e0e10;
+        font-family: 'Inter', sans-serif;
+      }
+      .glow {
+        text-shadow: 0 0 10px #8b5cf6, 0 0 20px #6366f1;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="text-white px-4 py-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+      <!-- Header -->
+      <header class="flex items-center justify-between">
+        <h1 class="text-3xl font-bold">🧬 DeFi Staking</h1>
+        <button
+          id="walletBtn"
+          class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg shadow-lg transition-all"
+        >
+          Connect Wallet
+        </button>
+      </header>
+
+      <!-- Stats -->
+      <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+        <div class="glass p-4 rounded-xl">
+          <p class="text-sm text-gray-400">Wallet Balance</p>
+          <h2 id="walletBalance" class="text-xl font-semibold">0.00 ETH</h2>
+        </div>
+        <div class="glass p-4 rounded-xl">
+          <p class="text-sm text-gray-400">Staked</p>
+          <h2 id="stakedAmount" class="text-xl font-semibold">0.00 ETH</h2>
+        </div>
+        <div class="glass p-4 rounded-xl">
+          <p class="text-sm text-gray-400">APY</p>
+          <h2 class="text-xl font-semibold text-green-400">12.5%</h2>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="flex space-x-4">
+        <button
+          id="stakeTab"
+          class="tab-btn px-4 py-2 rounded-md bg-purple-700 font-semibold"
+        >
+          Stake
+        </button>
+        <button
+          id="unstakeTab"
+          class="tab-btn px-4 py-2 rounded-md bg-gray-700 hover:bg-purple-600 transition"
+        >
+          Unstake
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <section id="tabContent" class="glass p-6 rounded-xl space-y-4">
+        <label class="block">
+          <span class="text-sm text-gray-300">Enter Amount</span>
+          <input
+            id="amountInput"
+            type="number"
+            placeholder="0.0"
+            class="w-full mt-1 p-2 rounded-lg bg-gray-800 text-white border border-purple-600 focus:outline-none"
+          />
+        </label>
+        <div class="text-sm text-gray-400">
+          Estimated Reward: <span id="estimatedReward">0.00 ETH</span>
+        </div>
+        <button
+          id="actionBtn"
+          class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded-md font-semibold transition-all"
+        >
+          Stake Now
+        </button>
+      </section>
+
+      <!-- Footer Stats -->
+      <section class="glass p-4 rounded-xl text-sm text-gray-400 text-center">
+        🔒 Total Value Locked: <span class="text-white font-semibold"
+          >$1,200,000</span
+        >
+      </section>
+    </div>
+
+    <script>
+      let isStake = true;
+      const walletBtn = document.getElementById("walletBtn");
+      const walletBalance = document.getElementById("walletBalance");
+      const stakedAmount = document.getElementById("stakedAmount");
+      const estimatedReward = document.getElementById("estimatedReward");
+      const amountInput = document.getElementById("amountInput");
+      const actionBtn = document.getElementById("actionBtn");
+      const tabContent = document.getElementById("tabContent");
+      const stakeTab = document.getElementById("stakeTab");
+      const unstakeTab = document.getElementById("unstakeTab");
+
+      walletBtn.addEventListener("click", () => {
+        walletBalance.textContent = "1.50 ETH";
+        alert("Wallet connected (simulated)");
+      });
+
+      stakeTab.addEventListener("click", () => {
+        isStake = true;
+        stakeTab.classList.add("bg-purple-700");
+        unstakeTab.classList.remove("bg-purple-700");
+        actionBtn.textContent = "Stake Now";
+      });
+
+      unstakeTab.addEventListener("click", () => {
+        isStake = false;
+        unstakeTab.classList.add("bg-purple-700");
+        stakeTab.classList.remove("bg-purple-700");
+        actionBtn.textContent = "Unstake";
+      });
+
+      amountInput.addEventListener("input", () => {
+        const value = parseFloat(amountInput.value) || 0;
+        const reward = isStake ? (value * 0.125).toFixed(2) : 0;
+        estimatedReward.textContent = `${reward} ETH`;
+      });
+
+      actionBtn.addEventListener("click", () => {
+        const value = parseFloat(amountInput.value);
+        if (!value || value <= 0) {
+          alert("Enter a valid amount");
+          return;
+        }
+
+        if (isStake) {
+          stakedAmount.textContent = `${value.toFixed(2)} ETH`;
+          alert(`Staked ${value} ETH`);
+        } else {
+          stakedAmount.textContent = `0.00 ETH`;
+          alert(`Unstaked ${value} ETH`);
+        }
+        amountInput.value = "";
+        estimatedReward.textContent = "0.00 ETH";
+      });
+    </script>
+  </body>
+</html>
